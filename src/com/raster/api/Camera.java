@@ -11,8 +11,6 @@ public class Camera {
 
     private int width, height;
 
-    private Matrix4f projection, view;
-
     public Camera(Vector3f position, Vector3f rotation, int width, int height, float fov, float near, float far) {
         this.position = position;
         this.rotation = rotation;
@@ -22,21 +20,17 @@ public class Camera {
         this.fov = fov;
         this.near = near;
         this.far = far;
-
-        this.projection = new Matrix4f();
-        this.view = new Matrix4f();
-
     }
 
     public void load(RenderQueue queue) {
-        projection.identity().perspective((float) Math.toRadians(fov), aspectRatio, near, far);
-        view.identity().translate(position)
+        WorldMatrix.projection.identity().perspective((float) Math.toRadians(fov), aspectRatio, near, far);
+        WorldMatrix.view.identity().translate(position)
                 .rotateX(rotation.x)
                 .rotateY(rotation.y)
                 .rotateZ(rotation.z);
 
-        queue.getShader().setUniform("transformations.view", view);
-        queue.getShader().setUniform("transformations.projection", projection);
+        queue.getShader().setUniform("transformations.view", WorldMatrix.view);
+        queue.getShader().setUniform("transformations.projection", WorldMatrix.projection);
     }
 
     public Vector3f getPosition() {
@@ -101,21 +95,5 @@ public class Camera {
 
     public void setFar(float far) {
         this.far = far;
-    }
-
-    public Matrix4f getProjection() {
-        return projection;
-    }
-
-    public void setProjection(Matrix4f projection) {
-        this.projection = projection;
-    }
-
-    public Matrix4f getView() {
-        return view;
-    }
-
-    public void setView(Matrix4f view) {
-        this.view = view;
     }
 }

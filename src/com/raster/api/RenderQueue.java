@@ -2,13 +2,11 @@ package com.raster.api;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class RenderQueue {
 
     private RenderContext context;
 
-    private ConcurrentLinkedQueue<Actor> queue;
+    private ConcurrentLinkedQueue<AbstractActor> queue;
 
     private ShaderProgram shader;
 
@@ -17,11 +15,11 @@ public class RenderQueue {
         this.queue = new ConcurrentLinkedQueue<>();
     }
 
-    public Actor poll() {
+    public AbstractActor poll() {
         return queue.poll();
     }
 
-    public Actor push(Actor actor) {
+    public AbstractActor push(AbstractActor actor) {
         queue.add(actor);
         return actor;
     }
@@ -30,8 +28,8 @@ public class RenderQueue {
         if (shader == null) {
             throw new RenderException("no shader specified");
         }
-        ConcurrentLinkedQueue<Actor> storage = new ConcurrentLinkedQueue<>(queue);
-        Actor actor;
+        ConcurrentLinkedQueue<AbstractActor> storage = new ConcurrentLinkedQueue<>(queue);
+        AbstractActor actor;
         while ((actor = poll()) != null) {
             actor.render(this);
         }

@@ -47,6 +47,10 @@ public class ShaderProgram {
         }
     }
 
+    public void setUniform(String name, float value) {
+        glUniform1f(getUniformLocation(name), value);
+    }
+
     public void setUniform(String name, Matrix4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer matrixData = stack.callocFloat(16); // 4 * 4
@@ -60,7 +64,6 @@ public class ShaderProgram {
     }
 
     private int getUniformLocation(String name) {
-        System.out.println("(uniform) " + name + " -> " + uniformsCache.get(name));
         if (uniformsCache.containsKey(name)) return uniformsCache.get(name);
         uniformsCache.put(name, glGetUniformLocation(programID, name));
         return uniformsCache.get(name);

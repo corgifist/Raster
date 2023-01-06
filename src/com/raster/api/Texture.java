@@ -6,12 +6,14 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL30.GL_RG;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.GL46.GL_MAX_TEXTURE_MAX_ANISOTROPY;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
@@ -19,6 +21,17 @@ public class Texture {
     private int textureID;
     private int width, height, channels;
     private String samplerName;
+
+    public static float ANISOTROPY_LEVEL = 8;
+
+    private static HashMap<String, Texture> cache = new HashMap<>();
+
+    public static Texture create(String path) {
+        if (cache.containsKey(path)) return cache.get(path);
+        Texture texture = new Texture(path);
+        cache.put(path, texture);
+        return texture;
+    }
 
     public Texture(String path) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -37,6 +50,7 @@ public class Texture {
 
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, getFormatByChannels(), GL_UNSIGNED_BYTE, data);
+            glTexParameterf(GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY, ANISOTROPY_LEVEL);
             glGenerateMipmap(GL_TEXTURE_2D);
             stbi_image_free(data);
             unbind();
