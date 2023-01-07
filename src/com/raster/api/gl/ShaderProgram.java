@@ -81,7 +81,9 @@ public class ShaderProgram {
     private int createShader(int type, String path) throws IOException {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             int shaderID = glCreateShader(type);
-            glShaderSource(shaderID, Files.readString(Path.of("shaders/" + path)));
+            String shaderSource = GLSLAPI.getAPIString(type) + "\n" + Files.readString(Path.of("shaders/" + path)); // another variable for debugging purposes
+            System.out.println(shaderSource);
+            glShaderSource(shaderID, shaderSource);
             glCompileShader(shaderID);
 
             IntBuffer success = stack.callocInt(1);

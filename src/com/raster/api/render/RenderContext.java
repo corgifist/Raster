@@ -42,9 +42,10 @@ public class RenderContext {
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
         glViewport(0, 0, width, height);
-        // glEnable(GL_TEXTURE_2D);
+        glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_DEBUG_OUTPUT);
+        glCullFace(GL_BACK);
         glDebugMessageCallback(new GLDebugMessageCallback() {
             @Override
             public void invoke(int source, int type, int id, int severity, int length, long message, long userParam) {

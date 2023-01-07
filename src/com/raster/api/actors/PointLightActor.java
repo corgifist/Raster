@@ -8,9 +8,20 @@ public class PointLightActor extends AbstractActor {
 
     private Vector3f position, color;
 
-    public PointLightActor(Vector3f position, Vector3f color) {
+    private float specularDamper;
+
+    public PointLightActor(Vector3f position, Vector3f color, float specularDamper) {
         this.position = position;
         this.color = color;
+        this.specularDamper = specularDamper;
+    }
+
+    public PointLightActor(Vector3f position, Vector3f color) {
+        this(position, color, 32);
+    }
+
+    public PointLightActor(Vector3f position) {
+        this(position, new Vector3f(1));
     }
 
     @Override
@@ -18,8 +29,10 @@ public class PointLightActor extends AbstractActor {
         ShaderProgram shader = queue.getShader();
 
         // support of only one light for now
-        shader.setUniform("light.position", position);
-        shader.setUniform("light.color", color);
+        shader.setUniform("point.position", position);
+        shader.setUniform("point.color", color);
+
+        shader.setUniform("light.specularDamper", specularDamper);
     }
 
     public Vector3f getPosition() {
@@ -36,5 +49,13 @@ public class PointLightActor extends AbstractActor {
 
     public void setColor(Vector3f color) {
         this.color = color;
+    }
+
+    public float getSpecularDamper() {
+        return specularDamper;
+    }
+
+    public void setSpecularDamper(float specularDamper) {
+        this.specularDamper = specularDamper;
     }
 }

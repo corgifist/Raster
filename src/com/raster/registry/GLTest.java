@@ -1,5 +1,6 @@
 package com.raster.registry;
 
+import com.raster.api.actors.AmbientLightActor;
 import com.raster.api.actors.CameraActor;
 import com.raster.api.actors.PointLightActor;
 import com.raster.api.actors.StaticMeshActor;
@@ -17,6 +18,7 @@ public class GLTest implements ApplicationAdapter {
     private ShaderProgram shader;
     private StaticMeshActor cube;
     private PointLightActor light;
+    private AmbientLightActor ambient;
 
     private CameraActor camera;
 
@@ -33,18 +35,20 @@ public class GLTest implements ApplicationAdapter {
 
         this.camera = new CameraActor(new Vector3f(), new Vector3f(), 800, 600, 60, 0.1f, 1000f);
 
-        this.cube = new StaticMeshActor("cube.obj");
+        this.cube = new StaticMeshActor("stanford-bunny.obj");
         cube.setDiffuse(Texture.create("banknote.png"));
-        cube.getScale().mul(0.5f);
+        cube.getScale().mul(0.7f);
         cube.getPosition().z = -3;
-        this.light = new PointLightActor(new Vector3f(0, 0, 2), new Vector3f(1));
+        cube.getPosition().y = -0.1f;
+        this.light = new PointLightActor(new Vector3f(0, 0, 2), new Vector3f(0.6f));
+        this.ambient = new AmbientLightActor(0.1f);
     }
 
     @Override
     public void render() {
         context.clear();
 
-        queue.push(light);
+        queue.push(light, ambient);
         queue.push(camera);
         queue.push(cube);
         queue.render();

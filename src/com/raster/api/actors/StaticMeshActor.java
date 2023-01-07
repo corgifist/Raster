@@ -1,5 +1,6 @@
 package com.raster.api.actors;
 
+import com.raster.api.gl.ShaderProgram;
 import com.raster.api.render.RenderException;
 import com.raster.api.render.RenderQueue;
 import com.raster.api.gl.Texture;
@@ -19,6 +20,8 @@ public class StaticMeshActor extends AbstractActor {
     private Vector3f position, rotation, scale;
     private Vector3f tint;
 
+    private float specularIntensity;
+
     private Texture diffuse;
 
     public StaticMeshActor(String path) {
@@ -27,6 +30,7 @@ public class StaticMeshActor extends AbstractActor {
         this.rotation = new Vector3f();
         this.scale = new Vector3f(1);
         this.tint = new Vector3f(1);
+        this.specularIntensity = 1;
 
         processModel("assets/" + path);
     }
@@ -42,8 +46,10 @@ public class StaticMeshActor extends AbstractActor {
     }
 
     private void updateObjectProperties(RenderQueue queue) {
-        queue.getShader().setUniform("properties.tint", tint);
-        queue.getShader().setUniform("properties.texturesEnabled", fromBoolean(diffuse != null));
+        ShaderProgram shader = queue.getShader();
+        shader.setUniform("properties.tint", tint);
+        shader.setUniform("properties.texturesEnabled", fromBoolean(diffuse != null));
+        shader.setUniform("properties.specularIntensity", specularIntensity);
         if (diffuse != null) diffuse.updateSampler(queue, 0);
     }
 
@@ -94,9 +100,13 @@ public class StaticMeshActor extends AbstractActor {
             vertices.add(vertexPos.y());
             vertices.add(vertexPos.z());
 
-            AIVector3D texCoordsPos = texCoordsBuffer.get(i);
-            texCoords.add(texCoordsPos.x());
-            texCoords.add(texCoordsPos.y());
+            if (texCoordsBuffer != null) {
+                AIVector3D texCoordsPos = texCoordsBuffer.get(i);
+                texCoords.add(texCoordsPos.x());
+                texCoords.add(texCoordsPos.y());
+            } else {
+                texCoords.add(0f); texCoords.add(0f);
+            }
 
             AIVector3D normalPos = normalsBuffer.get(i);
             normals.add(normalPos.x());

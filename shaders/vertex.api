@@ -1,0 +1,7 @@
+#version 400 core
+
+struct Transformations {
+    mat4 projection;
+    mat4 view;
+    mat4 transformation;
+};

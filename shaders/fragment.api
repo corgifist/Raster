@@ -1,0 +1,36 @@
+#version 400 core
+
+struct ObjectProperties {
+    float texturesEnabled;
+    float specularIntensity;
+
+    vec3 tint;
+    sampler2D diffuseSampler;
+};
+
+struct PointLight {
+    vec3 position;
+    vec3 color;
+
+    float specularDamper;
+};
+
+struct AmbientLight {
+    float intensity;
+
+    vec3 color;
+};
+
+in VertexOutput {
+    vec4 vertexPosition;
+    vec2 texCoords;
+    vec3 normal;
+    vec3 worldFragPos;
+} vertexOutput;
+
+
+out vec4 FragColor;
+
+uniform PointLight point;
+uniform AmbientLight ambient;
+uniform ObjectProperties properties;
