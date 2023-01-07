@@ -12,13 +12,16 @@ struct Transformations {
 
 uniform Transformations transformations;
 
-out vec4 fVertexPosition;
-out vec2 fTexCoords;
-out vec3 fNormal;
+out VertexOutput {
+    vec4 vertexPosition;
+    vec2 texCoords;
+    vec3 normal;
+} vertexOutput;
 
 void main() {
     gl_Position = transformations.projection * transformations.view * transformations.transformation * vec4(vertexPosition, 1.0);
-    fVertexPosition = vec4(vertexPosition, 1.0);
-    fTexCoords = texCoords;
-    fNormal = normal;
+
+    vertexOutput.vertexPosition = vec4(vertexPosition, 1.0);
+    vertexOutput.texCoords = texCoords;
+    vertexOutput.normal = mat3(transpose(inverse(transformations.transformation))) * normal;
 }
