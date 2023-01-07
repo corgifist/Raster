@@ -16,6 +16,7 @@ out VertexOutput {
     vec4 vertexPosition;
     vec2 texCoords;
     vec3 normal;
+    vec3 worldFragPos;
 } vertexOutput;
 
 void main() {
@@ -24,4 +25,5 @@ void main() {
     vertexOutput.vertexPosition = vec4(vertexPosition, 1.0);
     vertexOutput.texCoords = texCoords;
     vertexOutput.normal = mat3(transpose(inverse(transformations.transformation))) * normal;
+    vertexOutput.worldFragPos = mat3(transformations.transformation) * vertexPosition;
 }

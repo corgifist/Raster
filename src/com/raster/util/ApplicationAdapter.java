@@ -1,6 +1,6 @@
 package com.raster.util;
 
-import com.raster.api.RenderContext;
+import com.raster.api.render.RenderContext;
 
 public interface ApplicationAdapter {
 
