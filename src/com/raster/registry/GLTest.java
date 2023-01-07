@@ -11,6 +11,8 @@ import com.raster.api.render.RenderQueue;
 import com.raster.util.ApplicationAdapter;
 import org.joml.Vector3f;
 
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class GLTest implements ApplicationAdapter {
 
     private RenderContext context;
@@ -35,12 +37,12 @@ public class GLTest implements ApplicationAdapter {
 
         this.camera = new CameraActor(new Vector3f(), new Vector3f(), 800, 600, 60, 0.1f, 1000f);
 
-        this.cube = new StaticMeshActor("stanford-bunny.obj");
-        cube.setDiffuse(Texture.create("banknote.png"));
+        this.cube = new StaticMeshActor("cube.obj");
+        cube.setDiffuse(Texture.create("rainbow.png"));
         cube.getScale().mul(0.7f);
         cube.getPosition().z = -3;
         cube.getPosition().y = -0.1f;
-        this.light = new PointLightActor(new Vector3f(0, 0, 2), new Vector3f(0.6f));
+        this.light = new PointLightActor(new Vector3f(0, 0, 2), new Vector3f(0.8f));
         this.ambient = new AmbientLightActor(0.1f);
     }
 
@@ -48,7 +50,7 @@ public class GLTest implements ApplicationAdapter {
     public void render() {
         context.clear();
 
-        queue.push(light, ambient);
+        queue.push(light);
         queue.push(camera);
         queue.push(cube);
         queue.render();
@@ -58,6 +60,7 @@ public class GLTest implements ApplicationAdapter {
     @Override
     public void event() {
         cube.getRotation().add(0.01f, 0.01f, 0.01f);
+        camera.getPosition().z = (float) Math.sin(glfwGetTime());
     }
 
     @Override

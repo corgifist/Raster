@@ -37,6 +37,8 @@ public class CameraActor extends AbstractActor {
 
         queue.getShader().setUniform("transformations.view", WorldMatrix.view);
         queue.getShader().setUniform("transformations.projection", WorldMatrix.projection);
+
+        queue.getShader().setUniform("metadata.cameraPosition", position);
     }
 
     public Vector3f getPosition() {

@@ -32,7 +32,7 @@ public class PointLightActor extends AbstractActor {
         shader.setUniform("point.position", position);
         shader.setUniform("point.color", color);
 
-        shader.setUniform("light.specularDamper", specularDamper);
+        shader.setUniform("point.specularDamper", specularDamper);
     }
 
     public Vector3f getPosition() {

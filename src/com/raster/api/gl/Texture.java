@@ -55,7 +55,7 @@ public class Texture {
             stbi_image_free(data);
             unbind();
 
-            this.samplerName = "diffuseSampler";
+            this.samplerName = "properties.diffuseSampler";
         }
     }
 

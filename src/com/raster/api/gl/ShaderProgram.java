@@ -66,7 +66,9 @@ public class ShaderProgram {
 
     private int getUniformLocation(String name) {
         if (uniformsCache.containsKey(name)) return uniformsCache.get(name);
-        uniformsCache.put(name, glGetUniformLocation(programID, name));
+        int location = glGetUniformLocation(programID, name);
+        if (location == -1) throw new RenderException("unreferenced uniform " + name);
+        uniformsCache.put(name, location);
         return uniformsCache.get(name);
     }
 

@@ -5,3 +5,17 @@ struct Transformations {
     mat4 view;
     mat4 transformation;
 };
+
+out VertexOutput {
+    vec4 vertexPosition;
+    vec2 texCoords;
+    vec3 normal;
+    vec3 worldFragPos;
+} vertexOutput;
+
+layout(location = 0) in vec3 vertexPosition;
+layout(location = 1) in vec2 texCoords;
+layout(location = 2) in vec3 normal;
+
+
+uniform Transformations transformations;

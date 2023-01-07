@@ -30,7 +30,7 @@ public class StaticMeshActor extends AbstractActor {
         this.rotation = new Vector3f();
         this.scale = new Vector3f(1);
         this.tint = new Vector3f(1);
-        this.specularIntensity = 1;
+        this.specularIntensity = 0.2f;
 
         processModel("assets/" + path);
     }
