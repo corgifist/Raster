@@ -4,7 +4,7 @@ import com.raster.api.render.RenderQueue;
 import com.raster.api.render.WorldMatrix;
 import org.joml.Vector3f;
 
-public class CameraActor extends AbstractActor {
+public class CameraActor implements AbstractActor {
 
     private Vector3f position, rotation;
 
@@ -23,6 +23,10 @@ public class CameraActor extends AbstractActor {
         this.far = far;
     }
 
+    public static CameraActor createResizedCamera(CameraActor camera, int width, int height) {
+        return new CameraActor(camera.getPosition(), camera.getRotation(), width, height, camera.getFov(), camera.getNear(), camera.getFar());
+    }
+
     @Override
     public void render(RenderQueue queue) {
         load(queue);
@@ -39,6 +43,17 @@ public class CameraActor extends AbstractActor {
         queue.getShader().setUniform("transformations.projection", WorldMatrix.projection);
 
         queue.getShader().setUniform("metadata.cameraPosition", position);
+    }
+
+    public void resizeProjection(CameraActor camera) {
+        this.position = camera.getPosition();
+        this.rotation = camera.getRotation();
+        this.width = camera.getWidth();
+        this.height = camera.getHeight();
+        this.aspectRatio = (float) camera.getWidth() / camera.getHeight();
+        this.fov = camera.getFov();
+        this.near = camera.getNear();
+        this.far = camera.getFar();
     }
 
     public Vector3f getPosition() {

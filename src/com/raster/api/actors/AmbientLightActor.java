@@ -1,10 +1,11 @@
 package com.raster.api.actors;
 
+import com.raster.Raster;
 import com.raster.api.gl.ShaderProgram;
 import com.raster.api.render.RenderQueue;
 import org.joml.Vector3f;
 
-public class AmbientLightActor extends AbstractActor {
+public class AmbientLightActor implements AbstractActor {
 
     private float intensity;
     private Vector3f color;
@@ -20,8 +21,22 @@ public class AmbientLightActor extends AbstractActor {
 
     @Override
     public void render(RenderQueue queue) {
-        ShaderProgram shader = queue.getShader();
-        shader.setUniform("ambient.intensity", intensity);
-        shader.setUniform("ambient.color", color);
+        Raster.warning("use LightDispatcherActor to load ambient light!");
+    }
+
+    public float getIntensity() {
+        return intensity;
+    }
+
+    public void setIntensity(float intensity) {
+        this.intensity = intensity;
+    }
+
+    public Vector3f getColor() {
+        return color;
+    }
+
+    public void setColor(Vector3f color) {
+        this.color = color;
     }
 }

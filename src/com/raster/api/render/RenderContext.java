@@ -1,5 +1,6 @@
 package com.raster.api.render;
 
+import com.raster.util.ApplicationAdapter;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -21,7 +22,10 @@ public class RenderContext {
     private int width, height;
     private long window;
 
-    public RenderContext(String title, int width, int height) {
+    public static ApplicationAdapter adapter;
+
+    public RenderContext(String title, int width, int height, boolean resizable) {
+        if (adapter == null) throw new RenderException("cannot create context without active application adapter!");
         this.tittle = title;
         this.width = width;
         this.height = height;
@@ -32,7 +36,7 @@ public class RenderContext {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
 
         this.window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (window == NULL) {
@@ -68,6 +72,8 @@ public class RenderContext {
             @Override
             public void invoke(long window, int newWidth, int newHeight) {
                 glViewport(0, 0, newWidth, newHeight);
+                adapter.resize(newWidth, newHeight);
+
             }
         });
         glfwSwapInterval(1);

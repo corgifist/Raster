@@ -1,10 +1,11 @@
 package com.raster.api.actors;
 
+import com.raster.Raster;
 import com.raster.api.gl.ShaderProgram;
 import com.raster.api.render.RenderQueue;
 import org.joml.Vector3f;
 
-public class PointLightActor extends AbstractActor {
+public class PointLightActor implements AbstractActor {
 
     private Vector3f position, color;
 
@@ -26,13 +27,7 @@ public class PointLightActor extends AbstractActor {
 
     @Override
     public void render(RenderQueue queue) {
-        ShaderProgram shader = queue.getShader();
-
-        // support of only one light for now
-        shader.setUniform("point.position", position);
-        shader.setUniform("point.color", color);
-
-        shader.setUniform("point.specularDamper", specularDamper);
+        Raster.warning("use LightDispatcherActor to load point light/lights");
     }
 
     public Vector3f getPosition() {

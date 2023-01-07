@@ -2,8 +2,8 @@ package com.raster.api.actors;
 
 import com.raster.api.render.RenderQueue;
 
-public abstract class AbstractActor {
+public interface AbstractActor {
 
-    public abstract void render(RenderQueue queue);
+    void render(RenderQueue queue);
 
 }

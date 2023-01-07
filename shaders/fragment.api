@@ -1,5 +1,7 @@
 #version 400 core
 
+const int MAX_POINT_LIGHTS = 64;
+
 struct ObjectProperties {
     float texturesEnabled;
     float specularIntensity;
@@ -20,6 +22,9 @@ struct AmbientLight {
 
 struct RenderMetadata {
     vec3 cameraPosition;
+
+    float pointLightCount;
+    float ambientLightExists;
 };
 
 in VertexOutput {
@@ -31,7 +36,7 @@ in VertexOutput {
 
 out vec4 FragColor;
 
-uniform PointLight point;
+uniform PointLight points[MAX_POINT_LIGHTS];
 uniform AmbientLight ambient;
 uniform ObjectProperties properties;
 uniform RenderMetadata metadata;

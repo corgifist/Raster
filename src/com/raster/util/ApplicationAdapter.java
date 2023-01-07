@@ -10,5 +10,7 @@ public interface ApplicationAdapter {
 
     void render();
 
+    void resize(int width, int height);
+
     RenderContext context();
 }

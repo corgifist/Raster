@@ -13,7 +13,7 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-public class StaticMeshActor extends AbstractActor {
+public class StaticMeshActor implements AbstractActor {
 
     private ArrayList<AbstractActor> actors;
 

@@ -7,7 +7,7 @@ import com.raster.api.gl.VertexAttributes;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class RawActor extends AbstractActor {
+public class RawActor implements AbstractActor {
 
     private ArrayBuffer verticesBuffer, texCoordsBuffer, normalsBuffer;
 
