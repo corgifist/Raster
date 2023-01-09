@@ -15,7 +15,12 @@ public class LightDispatcherActor implements AbstractActor, LightDispatcher{
         ShaderProgram shader = queue.getShader();
         int pointLightIndex = 0;
         int ambientLightExists = 0;
+        int directionalLightExists = 0;
         for (AbstractActor light : lights) {
+            if (light == null) {
+                Raster.warning("Null light object detected!");
+                continue;
+            }
             if (light instanceof PointLightActor pla) {
                 shader.setUniform(getPointString(pointLightIndex, "position"), pla.getPosition());
                 shader.setUniform(getPointString(pointLightIndex, "color"), pla.getColor());
@@ -34,9 +39,17 @@ public class LightDispatcherActor implements AbstractActor, LightDispatcher{
                 shader.setUniform("ambient.color", ala.getColor());
                 ambientLightExists = 1;
             }
+
+            if (light instanceof DirectionalLightActor dla) {
+                shader.setUniform("directional.direction", dla.getDirection());
+                shader.setUniform("directional.color", dla.getColor());
+                shader.setUniform("directional.specularDamper", dla.getSpecularDamper());
+                directionalLightExists = 1;
+            }
         }
         shader.setUniform("metadata.pointLightCount", (float) pointLightIndex);
         shader.setUniform("metadata.ambientLightExists", (float) ambientLightExists);
+        shader.setUniform("metadata.directionalLightExists", (float) directionalLightExists);
     }
 
     private String getPointString(int index, String attribute) {

@@ -1,5 +1,6 @@
 package com.raster.api.gl;
 
+import com.raster.Raster;
 import com.raster.api.render.RenderException;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -11,6 +12,7 @@ import java.nio.IntBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Random;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20C.glCreateShader;
@@ -67,7 +69,7 @@ public class ShaderProgram {
     private int getUniformLocation(String name) {
         if (uniformsCache.containsKey(name)) return uniformsCache.get(name);
         int location = glGetUniformLocation(programID, name);
-        if (location == -1) throw new RenderException("unreferenced uniform " + name);
+        if (location == -1) Raster.warning("UnreferencedUniform", "unreferenced uniform " + name + " (glsl compiler strips off unused uniforms, maybe it is a problem?)");
         uniformsCache.put(name, location);
         return uniformsCache.get(name);
     }

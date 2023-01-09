@@ -17,6 +17,7 @@ public class GLTest implements ApplicationAdapter {
     private StaticMeshActor cube;
     private PointLightActor light, light2;
     private AmbientLightActor ambient;
+    private DirectionalLightActor directional;
 
     private CameraActor camera;
 
@@ -44,6 +45,7 @@ public class GLTest implements ApplicationAdapter {
         this.light2 = new PointLightActor(new Vector3f(0, 0, 2));
         light2.setColor(new Vector3f(0, 1, 1).mul(0.4f));
         this.ambient = new AmbientLightActor(0.1f);
+        this.directional = new DirectionalLightActor(new Vector3f(0.2f, 0, 1), new Vector3f(0.2f, 0, 0));
 
         this.lightDispatcher = new LightDispatcherActor();
     }
@@ -52,7 +54,7 @@ public class GLTest implements ApplicationAdapter {
     public void render() {
         context.clear();
 
-        lightDispatcher.dispatch(queue, light, light2, ambient);
+        lightDispatcher.dispatch(queue, light, light2, ambient, directional);
         queue.push(camera);
         queue.push(cube);
         queue.render();

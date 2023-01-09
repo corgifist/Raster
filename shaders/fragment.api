@@ -13,6 +13,16 @@ struct PointLight {
     vec3 position;
     vec3 color;
     float specularDamper;
+
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+struct DirectionalLight {
+    vec3 direction;
+    vec3 color;
+    float specularDamper;
 };
 
 struct AmbientLight {
@@ -25,6 +35,7 @@ struct RenderMetadata {
 
     float pointLightCount;
     float ambientLightExists;
+    float directionalLightExists;
 };
 
 in VertexOutput {
@@ -38,5 +49,7 @@ out vec4 FragColor;
 
 uniform PointLight points[MAX_POINT_LIGHTS];
 uniform AmbientLight ambient;
+uniform DirectionalLight directional;
+
 uniform ObjectProperties properties;
 uniform RenderMetadata metadata;
