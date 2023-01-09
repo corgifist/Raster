@@ -18,7 +18,7 @@ public class StaticMeshActor implements AbstractActor {
     private ArrayList<AbstractActor> actors;
 
     private Vector3f position, rotation, scale;
-    private Vector3f tint;
+    private Vector3f color, tint;
 
     private float specularIntensity;
 
@@ -29,6 +29,7 @@ public class StaticMeshActor implements AbstractActor {
         this.position = new Vector3f();
         this.rotation = new Vector3f();
         this.scale = new Vector3f(1);
+        this.color = new Vector3f(1);
         this.tint = new Vector3f(1);
         this.specularIntensity = 0.2f;
 
@@ -217,5 +218,21 @@ public class StaticMeshActor implements AbstractActor {
 
     private float fromBoolean(boolean bool) {
         return bool ? 1f : 0f;
+    }
+
+    public Vector3f getColor() {
+        return color;
+    }
+
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
+
+    public float getSpecularIntensity() {
+        return specularIntensity;
+    }
+
+    public void setSpecularIntensity(float specularIntensity) {
+        this.specularIntensity = specularIntensity;
     }
 }

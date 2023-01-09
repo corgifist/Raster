@@ -1,7 +1,9 @@
 package com.raster.api.render;
 
 import com.raster.util.ApplicationAdapter;
+import org.joml.Vector2f;
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLDebugMessageCallback;
@@ -71,9 +73,17 @@ public class RenderContext {
         glfwSetFramebufferSizeCallback(window, new GLFWFramebufferSizeCallback() {
             @Override
             public void invoke(long window, int newWidth, int newHeight) {
+                ApplicationAdapter adapter = RenderContext.adapter;
                 glViewport(0, 0, newWidth, newHeight);
+                adapter.context().setWidth(newWidth);
+                adapter.context().setHeight(newHeight);
                 adapter.resize(newWidth, newHeight);
-
+            }
+        });
+        glfwSetCursorPosCallback(window, new GLFWCursorPosCallback() {
+            @Override
+            public void invoke(long l, double v, double v1) {
+                adapter.mouseMoveEvent(new Vector2f((float) v, (float) v1));
             }
         });
         glfwSwapInterval(1);
@@ -98,6 +108,10 @@ public class RenderContext {
     public void terminate() {
         glfwDestroyWindow(window);
         glfwTerminate();
+    }
+
+    public boolean keyState(int key) {
+        return glfwGetKey(window, key) == GLFW_PRESS;
     }
 
     public boolean shouldClose() {

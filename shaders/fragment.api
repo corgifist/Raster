@@ -5,6 +5,7 @@ const int MAX_POINT_LIGHTS = 64;
 struct ObjectProperties {
     float texturesEnabled;
     float specularIntensity;
+    vec3 color;
     vec3 tint;
     sampler2D diffuseSampler;
 };

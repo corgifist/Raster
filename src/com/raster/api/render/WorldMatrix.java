@@ -9,6 +9,8 @@ public class WorldMatrix {
     public static Matrix4f view = new Matrix4f().identity();
     public static Matrix4f projection = new Matrix4f().identity();
 
+    public static ViewMatrixType viewMatrixType = ViewMatrixType.SCRATCH;
+
     public static void uploadTransformation(RenderQueue queue) {
         queue.getShader().setUniform("transformations.transformation", transformation);
         queue.getShader().setUniform("transformations.view", view);

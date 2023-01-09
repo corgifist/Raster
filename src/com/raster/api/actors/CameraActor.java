@@ -1,12 +1,16 @@
 package com.raster.api.actors;
 
+import com.raster.Raster;
 import com.raster.api.render.RenderQueue;
+import com.raster.api.render.ViewMatrixType;
 import com.raster.api.render.WorldMatrix;
 import org.joml.Vector3f;
 
 public class CameraActor implements AbstractActor {
 
     private Vector3f position, rotation;
+
+    private Vector3f eye, center, up;
 
     private float aspectRatio, fov, near, far;
 
@@ -32,12 +36,26 @@ public class CameraActor implements AbstractActor {
         load(queue);
     }
 
+    public void lookAt(Vector3f eye, Vector3f center, Vector3f up) {
+        this.eye = eye;
+        this.center = center;
+        this.up = up;
+    }
+
     public void load(RenderQueue queue) {
         WorldMatrix.projection.identity().perspective((float) Math.toRadians(fov), aspectRatio, near, far);
-        WorldMatrix.view.identity().translate(position)
-                .rotateX(rotation.x)
-                .rotateY(rotation.y)
-                .rotateZ(rotation.z);
+        if (WorldMatrix.viewMatrixType == ViewMatrixType.SCRATCH) {
+            WorldMatrix.view.identity().translate(position)
+                    .rotateX(rotation.x)
+                    .rotateY(rotation.y)
+                    .rotateZ(rotation.z);
+        } else {
+            if (eye == null || center == null || up == null) {
+                Raster.warning("MaybeNullConstants", "LOOKAT constants may be null\n\teye: " + eye + "; center: " + center + "; up:" + up);
+                return;
+            }
+            WorldMatrix.view.identity().lookAt(eye, center, up);
+        }
 
         queue.getShader().setUniform("transformations.view", WorldMatrix.view);
         queue.getShader().setUniform("transformations.projection", WorldMatrix.projection);
@@ -118,5 +136,29 @@ public class CameraActor implements AbstractActor {
 
     public void setFar(float far) {
         this.far = far;
+    }
+
+    public Vector3f getEye() {
+        return eye;
+    }
+
+    public void setEye(Vector3f eye) {
+        this.eye = eye;
+    }
+
+    public Vector3f getCenter() {
+        return center;
+    }
+
+    public void setCenter(Vector3f center) {
+        this.center = center;
+    }
+
+    public Vector3f getUp() {
+        return up;
+    }
+
+    public void setUp(Vector3f up) {
+        this.up = up;
     }
 }

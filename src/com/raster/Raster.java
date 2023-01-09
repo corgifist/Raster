@@ -5,6 +5,9 @@ import com.raster.api.render.RenderException;
 import com.raster.util.ApplicationAdapter;
 
 public class Raster {
+
+    public static boolean mouseMoveEventWarningPrinted = false;
+
     public static void main(String[] args) {
         try {
             String applicationName = args[0];
@@ -18,8 +21,10 @@ public class Raster {
                 adapter.render();
             }
             adapter.context().terminate();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | RenderException e) {
+        } catch (InstantiationException | IllegalAccessException | RenderException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            Raster.warning("ApplicationNotFound", "application " + args[0] + " not found");
         }
     }
 

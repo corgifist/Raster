@@ -21,7 +21,7 @@ vec3 getPhongPoint(PointLight light) {
 }
 
 vec3 getOptionalAmbient() {
-    return vec3(ambient.intensity * ambient.color);
+    return vec3(ambient.intensity * ambient.color) * metadata.ambientLightExists;
 }
 
 vec3 getOptionalDirectional() {
@@ -33,19 +33,15 @@ void main() {
 
     if (properties.texturesEnabled == 1.0) color *= texture(properties.diffuseSampler, vertexOutput.texCoords).rgb;
 
-    vec3 phong = vec3(0);
-    if (metadata.pointLightCount != 0.0) {
-        for (float lightIndex = 0; lightIndex < metadata.pointLightCount; lightIndex++) {
-            PointLight point = points[int(lightIndex)];
-            phong += getPhongPoint(point);
-        }
+    vec3 phong = getOptionalAmbient();
+
+    for (float lightIndex = 0; lightIndex < metadata.pointLightCount; lightIndex++) {
+         PointLight point = points[int(lightIndex)];
+         phong += getPhongPoint(point);
     }
-    phong += getOptionalDirectional() * metadata.directionalLightExists;
-    phong += getOptionalAmbient() * metadata.ambientLightExists;
+    if (metadata.directionalLightExists == 1.0) phong += getOptionalDirectional();
 
     color *= phong;
-
-
     color *= properties.tint;
 
     FragColor = vec4(color, 1.0);
