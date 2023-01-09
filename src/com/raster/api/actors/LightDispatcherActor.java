@@ -17,10 +17,14 @@ public class LightDispatcherActor implements AbstractActor, LightDispatcher{
         int ambientLightExists = 0;
         for (AbstractActor light : lights) {
             if (light instanceof PointLightActor pla) {
-                shader.setUniform("points[" + pointLightIndex + "].position", pla.getPosition());
-                shader.setUniform("points[" + pointLightIndex + "].color", pla.getColor());
+                shader.setUniform(getPointString(pointLightIndex, "position"), pla.getPosition());
+                shader.setUniform(getPointString(pointLightIndex, "color"), pla.getColor());
 
-                shader.setUniform("points[" + pointLightIndex + "].specularDamper", pla.getSpecularDamper());
+                shader.setUniform(getPointString(pointLightIndex, "specularDamper"), pla.getSpecularDamper());
+
+                shader.setUniform(getPointString(pointLightIndex, "linear"), pla.getLinear());
+                shader.setUniform(getPointString(pointLightIndex, "constant"), pla.getConstant());
+                shader.setUniform(getPointString(pointLightIndex, "quadratic"), pla.getQuadratic());
 
                 pointLightIndex++;
             }
@@ -33,5 +37,9 @@ public class LightDispatcherActor implements AbstractActor, LightDispatcher{
         }
         shader.setUniform("metadata.pointLightCount", (float) pointLightIndex);
         shader.setUniform("metadata.ambientLightExists", (float) ambientLightExists);
+    }
+
+    private String getPointString(int index, String attribute) {
+        return "points[" + index + "]." + attribute;
     }
 }

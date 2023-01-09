@@ -11,10 +11,27 @@ public class PointLightActor implements AbstractActor {
 
     private float specularDamper;
 
-    public PointLightActor(Vector3f position, Vector3f color, float specularDamper) {
+    private float constant, linear, quadratic;
+
+    public PointLightActor(Vector3f position, Vector3f color, float specularDamper, float constant, float linear, float quadratic) {
         this.position = position;
         this.color = color;
         this.specularDamper = specularDamper;
+        this.constant = constant;
+        this.linear = linear;
+        this.quadratic = quadratic;
+    }
+
+    public PointLightActor(Vector3f position, Vector3f color, float specularDamper, float constant, float linear) {
+        this(position, color, specularDamper, constant, linear, 0.032f);
+    }
+
+    public PointLightActor(Vector3f position, Vector3f color, float specularDamper, float constant) {
+        this(position, color, specularDamper, constant, 0.09f);
+    }
+
+    public PointLightActor(Vector3f position, Vector3f color, float specularDamper) {
+        this(position, color, specularDamper, 1);
     }
 
     public PointLightActor(Vector3f position, Vector3f color) {
@@ -52,5 +69,29 @@ public class PointLightActor implements AbstractActor {
 
     public void setSpecularDamper(float specularDamper) {
         this.specularDamper = specularDamper;
+    }
+
+    public float getConstant() {
+        return constant;
+    }
+
+    public void setConstant(float constant) {
+        this.constant = constant;
+    }
+
+    public float getLinear() {
+        return linear;
+    }
+
+    public void setLinear(float linear) {
+        this.linear = linear;
+    }
+
+    public float getQuadratic() {
+        return quadratic;
+    }
+
+    public void setQuadratic(float quadratic) {
+        this.quadratic = quadratic;
     }
 }
