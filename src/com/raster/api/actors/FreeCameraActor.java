@@ -56,7 +56,7 @@ public class FreeCameraActor implements AbstractActor {
         WorldMatrix.viewMatrixType = ViewMatrixType.LOOKAT;
         camera.lookAt(cameraPos, new Vector3f(cameraPos).add(cameraFront), cameraUp);
         camera.setPosition(cameraPos);
-        queue.push(camera);
+        camera.render(queue);
     }
 
     public void mouse(Vector2f position) {

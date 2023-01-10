@@ -1,5 +1,6 @@
 package com.raster.api.render;
 
+import com.raster.Raster;
 import com.raster.util.ApplicationAdapter;
 import org.joml.Vector2f;
 import org.lwjgl.PointerBuffer;
@@ -47,6 +48,7 @@ public class RenderContext {
 
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
+        Raster.glCapabilitiesCreated = true;
         glViewport(0, 0, width, height);
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -55,6 +57,7 @@ public class RenderContext {
         glDebugMessageCallback(new GLDebugMessageCallback() {
             @Override
             public void invoke(int source, int type, int id, int severity, int length, long message, long userParam) {
+                if (!Raster.debug) return;
                 try (MemoryStack stack = MemoryStack.stackPush()) {
                     PointerBuffer msg = stack.pointers(message);
                     ByteBuffer msgText = msg.getByteBuffer(length);

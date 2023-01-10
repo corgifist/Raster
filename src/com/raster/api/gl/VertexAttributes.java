@@ -24,6 +24,7 @@ public class VertexAttributes {
             buffer.bind();
             attributePointer(i, buffer.getSize());
         }
+        unbind();
 
     }
 

@@ -4,7 +4,7 @@ import com.raster.Raster;
 import com.raster.api.gl.ShaderProgram;
 import com.raster.api.render.RenderQueue;
 
-public class LightDispatcherActor implements AbstractActor, LightDispatcher{
+public class LightDispatcherActor implements AbstractActor, Dispatcher {
     @Override
     public void render(RenderQueue queue) {
         Raster.warning("RenderWarning", "LightDispatcherActor cannot be rendered, but it is trying to be rendered!");

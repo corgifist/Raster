@@ -8,9 +8,26 @@ public class Raster {
 
     public static boolean mouseMoveEventWarningPrinted = false;
 
+    public static boolean glCapabilitiesCreated = false;
+
+    public static boolean debug = false;
+
     public static void main(String[] args) {
+        String applicationName = "GLTest";
+
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-debug" -> {
+                    Raster.debug = true;
+                }
+                case "-app" -> {
+                    applicationName = args[i + 1];
+                    i++;
+                }
+            }
+        }
+
         try {
-            String applicationName = args[0];
             Class<ApplicationAdapter> appAdapter = (Class<ApplicationAdapter>) Class.forName("com.raster.registry." + applicationName);
             ApplicationAdapter adapter = appAdapter.newInstance();
             RenderContext.adapter = adapter;
@@ -34,5 +51,16 @@ public class Raster {
 
     public static void warning(String arg) {
         warning("DeprecatedFeature", arg); // 'DeprecatedFeature' is a default warning type
+    }
+
+    public static void checkCapabilities(String text) {
+        if (!Raster.glCapabilitiesCreated) {
+            throw new RenderException(text);
+        }
+    }
+
+    public static void here() {
+        if (!debug) return;
+        System.out.println("HERE");
     }
 }

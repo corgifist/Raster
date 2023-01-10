@@ -22,6 +22,6 @@ public class GLSLAPI {
 
     public static String getAPIString(int type) {
         if (type == GL_VERTEX_SHADER) return VERTEX_API;
-        return FRAGMENT_API; // anyway
+        return FRAGMENT_API;
     }
 }

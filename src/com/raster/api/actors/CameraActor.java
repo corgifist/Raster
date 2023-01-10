@@ -4,6 +4,8 @@ import com.raster.Raster;
 import com.raster.api.render.RenderQueue;
 import com.raster.api.render.ViewMatrixType;
 import com.raster.api.render.WorldMatrix;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class CameraActor implements AbstractActor {
@@ -55,6 +57,11 @@ public class CameraActor implements AbstractActor {
                 return;
             }
             WorldMatrix.view.identity().lookAt(eye, center, up);
+        }
+
+        if (WorldMatrix.shrinkTransformations) {
+            System.out.println("shrinking");
+            WorldMatrix.view = new Matrix4f(new Matrix3f(WorldMatrix.view));
         }
 
         queue.getShader().setUniform("transformations.view", WorldMatrix.view);

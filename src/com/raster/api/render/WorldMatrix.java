@@ -11,6 +11,8 @@ public class WorldMatrix {
 
     public static ViewMatrixType viewMatrixType = ViewMatrixType.SCRATCH;
 
+    public static boolean shrinkTransformations = false;
+
     public static void uploadTransformation(RenderQueue queue) {
         queue.getShader().setUniform("transformations.transformation", transformation);
         queue.getShader().setUniform("transformations.view", view);

@@ -1,5 +1,6 @@
 package com.raster.api.actors;
 
+import com.raster.Raster;
 import com.raster.api.gl.ShaderProgram;
 import com.raster.api.render.RenderException;
 import com.raster.api.render.RenderQueue;
@@ -25,15 +26,15 @@ public class StaticMeshActor implements AbstractActor {
     private Texture diffuse;
 
     public StaticMeshActor(String path) {
+        Raster.checkCapabilities("cannot create actors when gl capabilities are not available");
         this.actors = new ArrayList<>();
-        this.position = new Vector3f();
-        this.rotation = new Vector3f();
-        this.scale = new Vector3f(1);
-        this.color = new Vector3f(1);
-        this.tint = new Vector3f(1);
-        this.specularIntensity = 0.2f;
-
+        reset();
         processModel("assets/" + path);
+    }
+
+    public StaticMeshActor(StaticMeshActor source) {
+        this.actors = source.getActors();
+        reset();
     }
 
     @Override
@@ -46,20 +47,29 @@ public class StaticMeshActor implements AbstractActor {
         }
     }
 
+    public void reset() {
+        this.position = new Vector3f();
+        this.rotation = new Vector3f();
+        this.scale = new Vector3f(1);
+        this.color = new Vector3f(1);
+        this.tint = new Vector3f(1);
+        this.specularIntensity = 0.2f;
+    }
+
     private void updateObjectProperties(RenderQueue queue) {
         ShaderProgram shader = queue.getShader();
         shader.setUniform("properties.tint", tint);
         shader.setUniform("properties.texturesEnabled", fromBoolean(diffuse != null));
         shader.setUniform("properties.specularIntensity", specularIntensity);
+        shader.setUniform("properties.color", color);
         if (diffuse != null) diffuse.updateSampler(queue, 0);
     }
 
     private void processModel(String path) {
         AIScene scene = Assimp.aiImportFile(path, Assimp.aiProcess_Triangulate
-                | Assimp.aiProcess_CalcTangentSpace
                 | Assimp.aiProcess_OptimizeMeshes
-                | Assimp.aiProcess_GenUVCoords);
-
+                | Assimp.aiProcess_GenUVCoords
+                | Assimp.aiProcess_GenSmoothNormals);
         if (scene == null
                 || (scene.mFlags() & Assimp.AI_SCENE_FLAGS_INCOMPLETE) == Assimp.AI_SCENE_FLAGS_INCOMPLETE
                 || scene.mRootNode() == null) {

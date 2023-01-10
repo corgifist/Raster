@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
@@ -33,6 +34,20 @@ public class Texture {
         return texture;
     }
 
+    public static TextureLoadData createLoadData(String path, MemoryStack stack) {
+//        stbi_set_flip_vertically_on_load(true);
+//        IntBuffer widthStack = stack.mallocInt(1);
+//        IntBuffer heightStack = stack.mallocInt(1);
+//        IntBuffer nrChannelsStack = stack.mallocInt(1);
+//        ByteBuffer data = stbi_load("assets/" + path, widthStack, heightStack, nrChannelsStack, 0);
+//
+//        int width = widthStack.get(0);
+//        int height = heightStack.get(0);
+//        int channels = nrChannelsStack.get(0);
+        // return new TextureLoadData(data, width, height, channels);
+        return null;
+    }
+
     public Texture(String path) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             stbi_set_flip_vertically_on_load(true);
@@ -49,8 +64,8 @@ public class Texture {
             bind();
 
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, getFormatByChannels(), GL_UNSIGNED_BYTE, data);
-            glTexParameterf(GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY, ANISOTROPY_LEVEL);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, getFormatByChannels(channels), GL_UNSIGNED_BYTE, data);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, ANISOTROPY_LEVEL);
             glGenerateMipmap(GL_TEXTURE_2D);
             stbi_image_free(data);
             unbind();
@@ -66,7 +81,7 @@ public class Texture {
         queue.getShader().setUniform(samplerName, index);
     }
 
-    public int getFormatByChannels() {
+    public static int getFormatByChannels(int channels) {
         return switch (channels) {
             case 1 -> GL_R;
             case 2 -> GL_RG;

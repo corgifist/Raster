@@ -24,6 +24,7 @@ public class ShaderProgram {
     private HashMap<String, Integer> uniformsCache;
 
     public ShaderProgram(String vertexShader, String fragmentShader) {
+        Raster.checkCapabilities("cannot create shader program when gl capabilities are not available");
         try {
             this.uniformsCache = new HashMap<>();
             this.programID = glCreateProgram();
@@ -86,7 +87,7 @@ public class ShaderProgram {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             int shaderID = glCreateShader(type);
             String shaderSource = GLSLAPI.getAPIString(type) + "\n" + Files.readString(Path.of("shaders/" + path)); // another variable for debugging purposes
-            System.out.println(shaderSource);
+            if (Raster.debug) System.out.println(shaderSource);
             glShaderSource(shaderID, shaderSource);
             glCompileShader(shaderID);
 

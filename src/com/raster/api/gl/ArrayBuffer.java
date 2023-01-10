@@ -15,7 +15,6 @@ public class ArrayBuffer {
 
         bind();
         bufferData(data);
-        unbind();
     }
 
     public void delete() {

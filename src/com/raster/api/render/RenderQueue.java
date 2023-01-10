@@ -1,5 +1,6 @@
 package com.raster.api.render;
 
+import com.raster.Raster;
 import com.raster.api.actors.AbstractActor;
 import com.raster.api.gl.ShaderProgram;
 
@@ -15,6 +16,7 @@ public class RenderQueue {
     private ShaderProgram shader;
 
     public RenderQueue(RenderContext context) {
+        Raster.checkCapabilities("cannot create render queue when gl capabilities is not available");
         this.context = context;
         this.queue = new ConcurrentLinkedQueue<>();
     }
