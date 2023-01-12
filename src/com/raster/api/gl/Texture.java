@@ -76,7 +76,7 @@ public class Texture {
             bind();
 
             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, getFormatByChannels(channels), GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, getFormatByChannels(channels), width, height, 0, getFormatByChannels(channels), GL_UNSIGNED_BYTE, data);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, ANISOTROPY_LEVEL);
             glGenerateMipmap(GL_TEXTURE_2D);
             stbi_image_free(data);

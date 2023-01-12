@@ -32,7 +32,11 @@ void main() {
     float depth = apiLinearizeDepth(gl_FragCoord.z);
     vec3 color = properties.color;
 
-    if (properties.texturesEnabled == 1.0) color *= texture(properties.diffuseSampler, vertexOutput.texCoords).rgb;
+    if (properties.texturesEnabled == 1.0) {
+        vec4 sampled = texture(properties.diffuseSampler, vertexOutput.texCoords);
+        if (sampled.a < 0.5) discard;
+        color *= sampled.rgb;
+    }
 
     vec3 phong = getOptionalAmbient();
 
@@ -44,7 +48,6 @@ void main() {
 
     color *= phong;
     color *= properties.tint;
-
     FragColor = vec4(color, 1.0);
     FragDepth = vec4(vec3(depth), 1.0);
 }

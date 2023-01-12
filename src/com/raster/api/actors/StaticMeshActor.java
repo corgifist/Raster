@@ -23,8 +23,6 @@ public class StaticMeshActor implements AbstractActor {
 
     private float specularIntensity;
 
-    private Texture diffuse;
-
     public StaticMeshActor(String path) {
         Raster.checkCapabilities("cannot create actors when gl capabilities are not available");
         this.actors = new ArrayList<>();
@@ -59,10 +57,8 @@ public class StaticMeshActor implements AbstractActor {
     private void updateObjectProperties(RenderQueue queue) {
         ShaderProgram shader = queue.getShader();
         shader.setUniform("properties.tint", tint);
-        shader.setUniform("properties.texturesEnabled", fromBoolean(diffuse != null));
         shader.setUniform("properties.specularIntensity", specularIntensity);
         shader.setUniform("properties.color", color);
-        if (diffuse != null) diffuse.updateSampler(queue, 0);
     }
 
     private void processModel(String path) {
@@ -94,7 +90,7 @@ public class StaticMeshActor implements AbstractActor {
         }
     }
 
-    private RawActor processActor(AIMesh mesh, AIScene scene) {
+    private RawTexturedActor processActor(AIMesh mesh, AIScene scene) {
         ArrayList<Float> vertices = new ArrayList<>();
         ArrayList<Float> texCoords = new ArrayList<>();
         ArrayList<Float> normals = new ArrayList<>();
@@ -135,6 +131,7 @@ public class StaticMeshActor implements AbstractActor {
             }
         }
 
+        Texture possibleDiffuse = null;
         int materialIndex = mesh.mMaterialIndex();
         if (materialIndex >= 0) {
             try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -147,8 +144,8 @@ public class StaticMeshActor implements AbstractActor {
 
                 String diffusePath = diffuseString.dataString();
                 if (diffusePath != null && diffusePath.length() > 0) {
-                    diffuse = Texture.create(diffusePath);
-                    diffuse.setSamplerName("properties.diffuseSampler");
+                    possibleDiffuse = Texture.create(diffusePath);
+                    possibleDiffuse.setSamplerName("properties.diffuseSampler");
                 }
             }
         }
@@ -159,7 +156,8 @@ public class StaticMeshActor implements AbstractActor {
 
         int[] indicesArray = listToArrayInteger(indices);
 
-        return new RawActor(verticesArray, indicesArray, texCoordsArray, normalsArray);
+        RawActor raw = new RawActor(verticesArray, indicesArray, texCoordsArray, normalsArray);
+        return new RawTexturedActor(raw, possibleDiffuse);
     }
 
     private float[] listToArrayFloat(ArrayList<Float> list) {
@@ -216,14 +214,6 @@ public class StaticMeshActor implements AbstractActor {
 
     public void setTint(Vector3f tint) {
         this.tint = tint;
-    }
-
-    public Texture getDiffuse() {
-        return diffuse;
-    }
-
-    public void setDiffuse(Texture diffuse) {
-        this.diffuse = diffuse;
     }
 
     private float fromBoolean(boolean bool) {
