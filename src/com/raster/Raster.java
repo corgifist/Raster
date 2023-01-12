@@ -12,6 +12,8 @@ public class Raster {
 
     public static boolean debug = false;
 
+    public static boolean inEvent = false;
+
     public static void main(String[] args) {
         String applicationName = "GLTest";
 
@@ -34,7 +36,9 @@ public class Raster {
             adapter.prepare();
             while (!adapter.context().shouldClose()) {
                 adapter.context().update();
+                inEvent = true;
                 adapter.event();
+                inEvent = false;
                 adapter.render();
             }
             adapter.context().terminate();

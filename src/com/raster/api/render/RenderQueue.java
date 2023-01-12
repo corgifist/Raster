@@ -39,6 +39,9 @@ public class RenderQueue {
         if (shader == null) {
             throw new RenderException("no shader specified");
         }
+        if (Raster.inEvent) {
+            Raster.warning("RenderingInEventMethod", "please, avoid rendering in event method, or you risk to lose quality and readability of your code");
+        }
         ConcurrentLinkedQueue<AbstractActor> storage = new ConcurrentLinkedQueue<>(queue);
         AbstractActor actor;
         while ((actor = poll()) != null) {

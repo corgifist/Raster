@@ -1,5 +1,5 @@
 void main() {
-    gl_Position = transformations.projection * transformations.view * transformations.transformation * vec4(vertexPosition, 1.0);
+    gl_Position = apiDefaultPositionTransform();
 
     vertexOutput.vertexPosition = vec4(vertexPosition, 1.0);
     vertexOutput.texCoords = texCoords;

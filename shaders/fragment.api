@@ -7,6 +7,7 @@ struct ObjectProperties {
     float specularIntensity;
     vec3 color;
     vec3 tint;
+    samplerCube cubemapSampler;
     sampler2D diffuseSampler;
 };
 
@@ -34,9 +35,23 @@ struct AmbientLight {
 struct RenderMetadata {
     vec3 cameraPosition;
 
+    vec2 resolution;
+
+    float cameraNear;
+    float cameraFar;
+
     float pointLightCount;
     float ambientLightExists;
     float directionalLightExists;
+};
+
+struct PostProcessingMetadata {
+    float inversionIntensity;
+};
+
+struct ProjectionTextures {
+    sampler2D diffuse;
+    sampler2D depth;
 };
 
 in VertexOutput {
@@ -46,7 +61,8 @@ in VertexOutput {
     vec3 worldFragPos;
 } vertexOutput;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
+layout(location = 1) out vec4 FragDepth;
 
 uniform PointLight points[MAX_POINT_LIGHTS];
 uniform AmbientLight ambient;
@@ -54,3 +70,13 @@ uniform DirectionalLight directional;
 
 uniform ObjectProperties properties;
 uniform RenderMetadata metadata;
+
+uniform ProjectionTextures projectionTextures;
+uniform PostProcessingMetadata postProcessingMetadata;
+
+float apiLinearizeDepth(float depth) {
+    float z = depth * 2.0 - 1.0;
+    float cameraNear = metadata.cameraNear;
+    float cameraFar = metadata.cameraFar;
+    return (1 * cameraNear * cameraFar) / (cameraFar - cameraNear - z * (cameraFar - cameraNear));
+}

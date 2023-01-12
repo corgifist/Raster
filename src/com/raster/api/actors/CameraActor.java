@@ -6,6 +6,7 @@ import com.raster.api.render.ViewMatrixType;
 import com.raster.api.render.WorldMatrix;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class CameraActor implements AbstractActor {
@@ -68,6 +69,9 @@ public class CameraActor implements AbstractActor {
         queue.getShader().setUniform("transformations.projection", WorldMatrix.projection);
 
         queue.getShader().setUniform("metadata.cameraPosition", position);
+        queue.getShader().setUniform("metadata.cameraNear", near);
+        queue.getShader().setUniform("metadata.cameraFar", far);
+        queue.getShader().setUniform("metadata.resolution", new Vector2f(width, height));
     }
 
     public void resizeProjection(CameraActor camera) {

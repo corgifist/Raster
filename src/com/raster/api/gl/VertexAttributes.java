@@ -18,14 +18,13 @@ public class VertexAttributes {
         this.indices = indices;
 
         bind();
-        indices.bind();
         for (int i = 0; i < attributes.length; i++) {
             ArrayBuffer buffer = attributes[i];
             buffer.bind();
             attributePointer(i, buffer.getSize());
         }
+        indices.bind();
         unbind();
-
     }
 
     public void delete() {

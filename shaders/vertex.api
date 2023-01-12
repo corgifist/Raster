@@ -19,3 +19,10 @@ layout(location = 2) in vec3 normal;
 
 
 uniform Transformations transformations;
+
+vec4 apiDefaultPositionTransform() {
+    return transformations.projection
+        * transformations.view
+        * transformations.transformation
+        * vec4(vertexPosition, 1.0);
+}

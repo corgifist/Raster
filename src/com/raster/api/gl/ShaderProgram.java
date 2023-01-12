@@ -3,6 +3,7 @@ package com.raster.api.gl;
 import com.raster.Raster;
 import com.raster.api.render.RenderException;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 
@@ -43,11 +44,23 @@ public class ShaderProgram {
         }
     }
 
+    public ShaderProgram(String shader) {
+        this(shader + ".vert", shader + ".frag");
+    }
+
     public void setUniform(String name, Vector3f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer vectorData = stack.callocFloat(3);
             value.get(vectorData);
             glUniform3fv(getUniformLocation(name), vectorData);
+        }
+    }
+
+    public void setUniform(String name, Vector2f value) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer vectorData = stack.callocFloat(2);
+            value.get(vectorData);
+            glUniform2fv(getUniformLocation(name), vectorData);
         }
     }
 

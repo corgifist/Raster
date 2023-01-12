@@ -29,7 +29,8 @@ vec3 getOptionalDirectional() {
 }
 
 void main() {
-    vec3 color = vec3(1);
+    float depth = apiLinearizeDepth(gl_FragCoord.z);
+    vec3 color = properties.color;
 
     if (properties.texturesEnabled == 1.0) color *= texture(properties.diffuseSampler, vertexOutput.texCoords).rgb;
 
@@ -45,4 +46,5 @@ void main() {
     color *= properties.tint;
 
     FragColor = vec4(color, 1.0);
+    FragDepth = vec4(vec3(depth), 1.0);
 }

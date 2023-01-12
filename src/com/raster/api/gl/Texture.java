@@ -2,6 +2,7 @@ package com.raster.api.gl;
 
 import com.raster.api.render.RenderException;
 import com.raster.api.render.RenderQueue;
+import org.lwjgl.opengl.GL11C;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -16,6 +17,7 @@ import static org.lwjgl.opengl.GL30.GL_RG;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.lwjgl.opengl.GL46.GL_MAX_TEXTURE_MAX_ANISOTROPY;
 import static org.lwjgl.stb.STBImage.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Texture {
 
@@ -46,6 +48,16 @@ public class Texture {
 //        int channels = nrChannelsStack.get(0);
         // return new TextureLoadData(data, width, height, channels);
         return null;
+    }
+
+    public Texture(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.textureID = glGenTextures();
+        bind();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
 
     public Texture(String path) {

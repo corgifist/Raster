@@ -33,9 +33,11 @@ public class EnvironmentSkyboxActor implements AbstractActor {
         ShaderProgram initialShader = queue.getShader();
         queue.setShader(skyboxShader);
 
+        Matrix4f oldView = new Matrix4f(WorldMatrix.view);
         WorldMatrix.view = new Matrix4f(new Matrix3f(WorldMatrix.view));
         skyboxTexture.updateSampler(queue, 0);
         cubeMesh.render(queue);
+        WorldMatrix.view = oldView;
 
         queue.setShader(initialShader);
         glDepthFunc(GL_LESS);
